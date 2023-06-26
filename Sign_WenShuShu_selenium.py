@@ -7,26 +7,30 @@ import requests
 from selenium import webdriver
 from selenium.common import NoSuchElementException
 from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
 from webdriver_manager.chrome import ChromeDriverManager
+
 
 def send(push_token, title, text):
     # http://www.pushplus.plus/send?token=XXXXX&title=XXX&content=XXX&template=html
     requests.get(f"http://www.pushplus.plus/send?token={push_token}&title={title}&content={text}&template=html")
 
-def sign_wss(user, password, token, msgs : list):
+
+def sign_wss(user, password, token, msgs: list):
+    s = Service(executable_path=ChromeDriverManager().install())
     chrome_options = Options()
     # 浏览器不提供可视化页面. linux下如果系统不支持可视化不加这条会启动失败
     chrome_options.add_argument('--headless')
     # 以最高权限运行
     chrome_options.add_argument('--no-sandbox')
     chrome_options.add_argument('--disable-dev-shm-usage')
-    b = webdriver.Chrome(executable_path=ChromeDriverManager().install(), options=chrome_options)
+    b = webdriver.Chrome(service=s, options=chrome_options)
 
     b.get('https://www.wenshushu.cn/signin')
 
     b.implicitly_wait(10)
-    logger.info("正在登陆...")
+    logger.info("正在登录...")
     b.find_element(by=By.XPATH, value='//*[contains(text(),"密码登录")]').click()
     time.sleep(1)
     b.find_element(by=By.XPATH, value='//*[@placeholder="手机号 / 邮箱"]').send_keys(user)
@@ -76,6 +80,7 @@ def sign_wss(user, password, token, msgs : list):
     msgs.append(msg)
 
     b.close()
+
 
 if __name__ == '__main__':
     logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
