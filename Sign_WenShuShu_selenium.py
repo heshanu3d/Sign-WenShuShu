@@ -61,13 +61,13 @@ def sign_wss(user, password, token, msgs: list):
     # 获取页面源码
     html = b.page_source
 
-    if ('今日已打卡' in html or '打卡成功' in html):
+    if '今日已打卡' in html or '打卡成功' in html:
         html = html.replace('\n', '')
         names = re.compile('class="m-title5">(.*?)</div>').findall(html)
         values = re.compile('class="re-num m-text9">(.*?)</div>').findall(html)
         result = ''
         for i in range(len(names)):
-            if (names[i] == '手气不好'):
+            if names[i] == '手气不好':
                 continue
             result += names[i] + '：' + values[i] + '</br>'
             logger.info('%s:%s' % (
