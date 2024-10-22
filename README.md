@@ -6,9 +6,9 @@
 
 # 使用教程
 
-### 1.获取Push Plus Token
-**首先打开[Push Plus](http://www.pushplus.plus/)点击登录，并使用微信扫描二维码**
-**之后点击**一对一推送**获取自己的Token**
+### 1.获取Push Plus Token 或 server酱sendKey
+**首先打开[Push Plus](http://www.pushplus.plus/)或[Server酱](https://sct.ftqq.com/)点击登录，并使用微信扫描二维码**
+**之后点击**一对一推送**或**Key&API**获取自己的Token**
 
 ### 2.fork本项目
 **在本页面点击**[**Fork按钮**](https://github.com/jiongjiongJOJO/Sign-WenShuShu/fork "Fork按钮")**，将本项目复制到自己仓库里。**
@@ -20,7 +20,8 @@
 |--------------|--------------------------------------------------------------------------------|----|
 | USER         | 你的账号                                                                           | ✔️ |
 | PASSWORD     | 你的密码                                                                           | ✔️ |
-| PUSH_MESSAGE | 第一步获取到的Token                                                                   | ❌️ |
+| PUSH_MESSAGE | 第一步获取到的Token(与SEND_KEY二选一)                                               | ❌️ |
+| SEND_KEY     | 第一步获取到的Token（与PUSH_MESSAGE二选一）                                          | ❌️ |
 | SHOW_USER    | 0或1或2，表示是否显示账号，0: 完全不显示（默认），1：显示部分（例如：131\*\*\*\*1234，或aa\*\*\*\*\*\*@github.com），2：完全显示 | ❌️ |
 
 ### 4.运行脚本

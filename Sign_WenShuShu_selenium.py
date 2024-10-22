@@ -15,11 +15,14 @@ from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.by import By
 
 
-def send(push_token, title, text):
+def send_push_plus(push_token, title, text):
     # http://www.pushplus.plus/send?token=XXXXX&title=XXX&content=XXX&template=html
     requests.get(f"https://www.pushplus.plus/send?token={push_token}&title={title}&content={text}&template=html",
                  proxies=proxies)
 
+def send_sct(key, title, text):
+    # https://sctapi.ftqq.com/<SENDKEY>.send?title=short_title&desp=long_content
+    requests.get(f"https://sctapi.ftqq.com/{key}.send?title={title}&desp={text}", proxies=proxies)
 
 def hide_user(user):
     user = str(user)
@@ -99,7 +102,7 @@ def captcha(element):
     return ((res['target'][2] + res['target'][0]) // 2) - left - 30
 
 
-def sign_wss(user, password, token, msgs: list, show_user_string: str):
+def sign_wss(user, password, msgs: list, show_user_string: str):
     chrome_options = Options()
     # 浏览器不提供可视化页面. linux下如果系统不支持可视化不加这条会启动失败
     if not debug_flag:
@@ -206,6 +209,7 @@ if __name__ == '__main__':
     users = os.environ.get('USER')
     password = os.environ.get('PASSWORD')
     push_token = os.environ.get('PUSH_MESSAGE')
+    send_key = os.environ.get('SEND_KEY')
     show_user = os.environ.get('SHOW_USER')  # 0: 完全不显示（默认），1：显示部分（例如：131****1234），2：完全显示
     debug_flag = os.environ.get('DEBUG')
     if show_user is None:
@@ -217,6 +221,8 @@ if __name__ == '__main__':
         exit()
     if push_token is None:
         push_token = ""
+    if send_key is None:
+        send_key = ""
     msgs = []
     if debug_flag is None:
         debug_flag = False
@@ -233,7 +239,7 @@ if __name__ == '__main__':
         while retry < 5:
             success = True
             try:
-                sign_wss(user, password, push_token, msgs, show_user_string)
+                sign_wss(user, password, msgs, show_user_string)
             except Exception as e:
                 print("签到{user}账户时出现异常：{error_message}".format(user=show_user_string, error_message=traceback.format_exc()))
                 print(f"已重试次数： {retry + 1}")
@@ -247,4 +253,5 @@ if __name__ == '__main__':
     for msg in msgs:
         push_text = push_text + msg[0] + msg[1]
 
-    send(push_token, '文叔叔签到结果', push_text)
+    send_push_plus(push_token, '文叔叔签到结果', push_text)
+    send_sct(send_key, '文叔叔签到结果', push_text)
