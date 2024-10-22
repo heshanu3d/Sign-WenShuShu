@@ -31,3 +31,4 @@ jobs:
                   PASSWORD: ${{ secrets.PASSWORD }}
                   PUSH_MESSAGE: ${{ secrets.PUSH_MESSAGE }}
                   SHOW_USER: ${{ secrets.SHOW_USER }}
+                  SEND_KEY: ${{ secrets.SEND_KEY }}
